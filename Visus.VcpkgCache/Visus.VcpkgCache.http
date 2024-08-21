@@ -1,0 +1,18 @@
+@BaseUrl = https://localhost:7099
+
+GET {{BaseUrl}}/x64-linux-vtk-m-9a6b74c691f5a588ade7437e33e56fdef6eb15e754eda36e45f0a5db3e9bf50a
+Accept: application/octet-stream
+
+###
+GET {{BaseUrl}}/horst
+
+###
+HEAD {{BaseUrl}}/x64-linux-vtk-m-9a6b74c691f5a588ade7437e33e56fdef6eb15e754eda36e45f0a5db3e9bf50a
+
+###
+HEAD {{BaseUrl}}/horst
+
+###
+PUT {{BaseUrl}}/x64-linux-vtk-m-9a6b74c691f5a588ade7437e33e56fdef6eb15e754eda36e45f0a5db3e9bf50a
+
+###
