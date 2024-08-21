@@ -126,6 +126,9 @@
   <data name="ErrorMissingHeader" xml:space="preserve">
     <value>The authentication header "{0}" is missing.</value>
   </data>
+  <data name="ErrorMissingToken" xml:space="preserve">
+    <value>No valid authentication token was specified in the options.</value>
+  </data>
   <data name="ErrorPackageContent" xml:space="preserve">
     <value>The content of the package must be provided.</value>
   </data>

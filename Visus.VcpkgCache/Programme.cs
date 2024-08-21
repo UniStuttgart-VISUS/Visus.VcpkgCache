@@ -26,11 +26,7 @@ builder.Services
     .AddAuthentication(TokenAuthenticationOptions.DefaultScheme)
     .AddScheme<TokenAuthenticationOptions, TokenAuthenticationHandler>(
         TokenAuthenticationOptions.DefaultScheme,
-        o=> {
-            o.Token = builder.Configuration
-                .GetSection(Settings.Section)
-                .GetValue<string>(nameof(Settings.Token));
-        });
+        o => builder.Configuration.GetSection(TokenAuthenticationOptions.Section).Bind(o));
 
 builder.Services.AddControllers();
 

@@ -19,18 +19,9 @@ namespace Visus.VcpkgCache {
         public const string Section = "CacheSettings";
 
         /// <summary>
-        /// Gets or sets the headers to be checked for the authorisation token.
-        /// </summary>
-        public string[] AuthorisationHeaders { get; set; } = ["Authorization"];
-
-        /// <summary>
         /// Gets or sets the path where the packages are stored.
         /// </summary>
         public string Path { get; set; } = null!;
 
-        /// <summary>
-        /// Gets or sets the API token that is required for storing new packages.
-        /// </summary>
-        public string Token { get; set; } = null!;
     }
 }

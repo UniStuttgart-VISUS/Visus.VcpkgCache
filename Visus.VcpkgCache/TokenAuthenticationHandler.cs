@@ -32,6 +32,12 @@ namespace Visus.VcpkgCache {
 
         #region Protected methods
         protected override Task<AuthenticateResult> HandleAuthenticateAsync() {
+            if (string.IsNullOrWhiteSpace(this.Options.Token)) {
+                var result = AuthenticateResult.Fail(
+                    Resources.ErrorMissingToken);
+                return Task.FromResult(result);
+            }
+
             foreach (var n in this.Options.HeaderNames) {
                 if (this.Request.Headers.ContainsKey(n)) {
                     var header  = this.Request.Headers[n];

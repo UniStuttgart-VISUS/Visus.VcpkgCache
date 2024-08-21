@@ -88,6 +88,15 @@ namespace Visus.VcpkgCache.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No valid authentication token was specified in the options..
+        /// </summary>
+        public static string ErrorMissingToken {
+            get {
+                return ResourceManager.GetString("ErrorMissingToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The content of the package must be provided..
         /// </summary>
         public static string ErrorPackageContent {

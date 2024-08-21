@@ -86,18 +86,14 @@ namespace Visus.VcpkgCache.Controllers {
         /// <returns></returns>
         [HttpPut("{path}")]
         [Authorize]
-        public async Task<IActionResult> Put(string path,
-                [FromBody] IFormFile file) {
+        public async Task<IActionResult> Put(string path) {
             if (path.ContainsInvalidFileNameChars()) {
                 return this.BadRequest(Resources.ErrorPackageName);
-            }
-            if (file == null) {
-                return this.BadRequest(Resources.ErrorPackageContent);
             }
 
             path = this.GetPhysicalPath(path);
 
-            using (var input = file.OpenReadStream())
+            using (var input = this.Request.Body)
             using (var output = IoFile.OpenWrite(path)) {
                 await input.CopyToAsync(output);
             }

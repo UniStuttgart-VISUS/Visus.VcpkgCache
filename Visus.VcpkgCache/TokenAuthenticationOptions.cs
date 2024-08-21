@@ -21,6 +21,11 @@ namespace Visus.VcpkgCache {
         public const string DefaultScheme = "TokenScheme";
 
         /// <summary>
+        /// The name of the configuration section to be mapped to this object.
+        /// </summary>
+        public const string Section = "TokenAuthentication";
+
+        /// <summary>
         /// Gets or sets the names of the headers that are checked.
         /// </summary>
         public string[] HeaderNames { get; set; } = ["Authorization"];
