@@ -68,7 +68,7 @@ server {
     listen [::]:80;
 
     location ~ (.*) {
-        proxy_http_version  1.1;
+        proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection keep-alive;
         proxy_set_header Host $host;
@@ -101,7 +101,7 @@ server {
     ssl_prefer_server_ciphers on;
 
     location ~ (.*) {
-        proxy_http_version  1.1;
+        proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection keep-alive;
         proxy_set_header Host $host;
