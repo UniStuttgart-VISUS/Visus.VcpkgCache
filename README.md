@@ -76,6 +76,7 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
 
+        # Note: make sure that the application is configured to run on this port:
         proxy_pass http://127.0.0.1:5000$1?$args;
     }
 }
@@ -96,7 +97,7 @@ server {
     ssl_certificate "/etc/pki/tls/certs/server.crt";
     ssl_certificate_key "/etc/pki/tls/private/server.key";
     ssl_session_cache shared:SSL:1m;
-    ssl_session_timeout  10m;
+    ssl_session_timeout 10m;
     ssl_ciphers PROFILE=SYSTEM;
     ssl_prefer_server_ciphers on;
 
@@ -109,6 +110,7 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
 
+        # Note: make sure that the application is configured to run on this port:
         proxy_pass http://127.0.0.1:5010$1?$args;
     }
 }
