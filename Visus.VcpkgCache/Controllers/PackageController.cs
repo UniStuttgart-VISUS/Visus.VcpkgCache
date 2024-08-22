@@ -5,7 +5,6 @@
 // <author>Christoph Müller</author>
 
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -13,7 +12,6 @@ using System;
 using System.IO;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using Visus.VcpkgCache.Properties;
 using IoFile = System.IO.File;
 
