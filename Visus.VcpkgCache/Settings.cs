@@ -19,6 +19,24 @@ namespace Visus.VcpkgCache {
         public const string Section = "CacheSettings";
 
         /// <summary>
+        /// Gets or sets an extension that is added to cached files.
+        /// </summary>
+        public string? EnforceExtension {
+            get => this._enforceExtension;
+            set {
+                if (string.IsNullOrWhiteSpace(value)) {
+                    value = null;
+                }
+
+                if ((value != null) && (value[0] != '.')) {
+                    value = $".{value}";
+                }
+
+                this._enforceExtension = value;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the path where the packages are stored.
         /// </summary>
         public string Path { get; set; } = null!;
@@ -28,5 +46,8 @@ namespace Visus.VcpkgCache {
         /// </summary>
         public string Token { get; set; } = null!;
 
+        #region Private fields
+        private string? _enforceExtension;
+        #endregion
     }
 }

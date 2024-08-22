@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.IO;
+using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Visus.VcpkgCache.Properties;
@@ -42,18 +43,31 @@ namespace Visus.VcpkgCache.Controllers {
         #endregion
 
         /// <summary>
+        /// Gets a list of all registered packages to authorised users.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        [Produces("application/json")]
+        public IActionResult Get() {
+            var files = from f in Directory.GetFiles(this._settings.Path)
+                        select Path.GetFileNameWithoutExtension(f);
+            return this.Ok(files);
+        }
+
+        /// <summary>
         /// Gets the specified package.
         /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
+        /// <param name="path">The path/name of the package to retrieve.</param>
+        /// <returns>The contents of the package.</returns>
         [HttpGet("{path}")]
         public IActionResult Get(string path) {
             if (path.ContainsInvalidFileNameChars()) {
                 return this.BadRequest(Resources.ErrorPackageName);
             }
 
-            this._logger.LogInformation("Package \"{Package}\" is requested "
-                + "from cache.", path);
+            this._logger.LogDebug("Package \"{Package}\" is requested from "
+                + "cache.", path);
             path = this.GetPhysicalPath(path);
 
             return IoFile.Exists(path)
@@ -64,16 +78,17 @@ namespace Visus.VcpkgCache.Controllers {
         /// <summary>
         /// Check whether the specified package exists.
         /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
+        /// <param name="path">The path/name of the package to check.</param>
+        /// <returns>HTTP 200 or 404, depending on whether the package exists.
+        /// </returns>
         [HttpHead("{path}")]
         public IActionResult Head(string path) {
             if (path.ContainsInvalidFileNameChars()) {
                 return this.BadRequest(Resources.ErrorPackageName);
             }
 
-            this._logger.LogInformation("Query package \"{Package}\" from "
-                + "cache.", path);
+            this._logger.LogDebug("Query package \"{Package}\" from cache.",
+                path);
             path = this.GetPhysicalPath(path);
 
             return IoFile.Exists(path)
@@ -84,8 +99,8 @@ namespace Visus.VcpkgCache.Controllers {
         /// <summary>
         /// Adds or updates the specified package.
         /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
+        /// <param name="path">The path/name of the package to update.</param>
+        /// <returns>The state of success of the operation.</returns>
         [HttpPut("{path}")]
         [Authorize]
         public async Task<IActionResult> Put(string path) {
@@ -93,8 +108,7 @@ namespace Visus.VcpkgCache.Controllers {
                 return this.BadRequest(Resources.ErrorPackageName);
             }
 
-            this._logger.LogInformation("Updating package \"{Package}\"...",
-                path);
+            this._logger.LogDebug("Updating package \"{Package}\"...", path);
             path = this.GetPhysicalPath(path);
 
             using (var input = this.Request.Body)
@@ -108,8 +122,18 @@ namespace Visus.VcpkgCache.Controllers {
         }
 
         #region Private methods
-        private string GetPhysicalPath(string path)
-            => Path.Combine(this._settings.Path, path);
+        private string GetPhysicalPath(string path) {
+            var retval = Path.Combine(this._settings.Path, path);
+
+            if (this._settings.EnforceExtension != null) {
+                retval = Path.ChangeExtension(retval,
+                    this._settings.EnforceExtension);
+            }
+
+            this._logger.LogTrace("Physical package path of \"{Package}\" has "
+                + "been resolved to \"{Path}\".", path, retval);
+            return retval;
+        }
         #endregion
 
         #region Private fields
