@@ -134,3 +134,18 @@ firewall-cmd --permanent --zone=public --add-service=http
 firewall-cmd --permanent --zone=public --add-service=https
 firewall-cmd --reload
 ```
+
+## Usage
+The application implements [binary caching](https://learn.microsoft.com/en-us/vcpkg/reference/binarycaching#http) by means of the `GET`, `HEAD` and `PUT` verbs.
+
+### Adding a package
+Call `PUT` with the "Authorization" header set tp "Token <your secret from appsettings.json>" and send the binary as the body. The path determines the file name, i.e. if you "PUT /x64-windows-embree-f68a0a4952c92aa6363de44910fdf569b3906f6a72ad8fbe7c09551a2d06a261", the data will be stored under the name "x64-windows-embree-f68a0a4952c92aa6363de44910fdf569b3906f6a72ad8fbe7c09551a2d06a261".
+
+### Retrieve a package
+Call `GET` on the package name, e.g. "GET /x64-windows-embree-f68a0a4952c92aa6363de44910fdf569b3906f6a72ad8fbe7c09551a2d06a261".
+
+### Check whether a package exists
+Call `HEAD` on the package name, e.g. "HEAD /x64-windows-embree-f68a0a4952c92aa6363de44910fdf569b3906f6a72ad8fbe7c09551a2d06a261". If you get a success status code, the package is available. If you get an HTTP 404, the package is not in the cache.
+
+### List packages
+You can call `GET /` to retrieve a JSON array of all packages in the cache, provided you send the authorisation header.
