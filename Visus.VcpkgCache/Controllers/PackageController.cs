@@ -52,6 +52,8 @@ namespace Visus.VcpkgCache.Controllers {
                 return this.BadRequest(Resources.ErrorPackageName);
             }
 
+            this._logger.LogInformation("Package \"{Package}\" is requested "
+                + "from cache.", path);
             path = this.GetPhysicalPath(path);
 
             return IoFile.Exists(path)
@@ -70,6 +72,8 @@ namespace Visus.VcpkgCache.Controllers {
                 return this.BadRequest(Resources.ErrorPackageName);
             }
 
+            this._logger.LogInformation("Query package \"{Package}\" from "
+                + "cache.", path);
             path = this.GetPhysicalPath(path);
 
             return IoFile.Exists(path)
@@ -89,6 +93,8 @@ namespace Visus.VcpkgCache.Controllers {
                 return this.BadRequest(Resources.ErrorPackageName);
             }
 
+            this._logger.LogInformation("Updating package \"{Package}\"...",
+                path);
             path = this.GetPhysicalPath(path);
 
             using (var input = this.Request.Body)
@@ -96,6 +102,8 @@ namespace Visus.VcpkgCache.Controllers {
                 await input.CopyToAsync(output);
             }
 
+            this._logger.LogInformation("Package \"{Package}\" successfully "
+                + "updated.", path);
             return this.NoContent();
         }
 
