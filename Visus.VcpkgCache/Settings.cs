@@ -23,5 +23,10 @@ namespace Visus.VcpkgCache {
         /// </summary>
         public string Path { get; set; } = null!;
 
+        /// <summary>
+        /// Gets or sets the authentication token we expect for PUT requests.
+        /// </summary>
+        public string Token { get; set; } = null!;
+
     }
 }

@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Visus.HeaderAuthentication;
+using Visus.HeaderAuthentication.Handlers;
 using Visus.VcpkgCache;
 
 
@@ -21,11 +23,11 @@ builder.Services.AddOptionsWithValidateOnStart<Settings>().Configure(o => {
     builder.Configuration.GetSection(Settings.Section).Bind(o);
 });
 
-builder.Services
-    .AddAuthentication(TokenAuthenticationOptions.DefaultScheme)
-    .AddScheme<TokenAuthenticationOptions, TokenAuthenticationHandler>(
-        TokenAuthenticationOptions.DefaultScheme,
-        o => builder.Configuration.GetSection(TokenAuthenticationOptions.Section).Bind(o));
+builder.Services.AddHeaderAuthentication("Token", o => {
+    var settings = new Settings();
+    builder.Configuration.GetSection(Settings.Section).Bind(settings);
+    o.HeaderHandler = new TokenHeaderHandler("Token", settings.Token);
+});
 
 builder.Services.AddControllers();
 

@@ -20,10 +20,13 @@ namespace Visus.VcpkgCache {
         /// Initialises a new instance.
         /// </summary>
         public SettingsValidator() {
-            this.RuleFor(c => c.Path)
+            this.RuleFor(o => o.Path)
                 .NotEmpty()
                 .Must(Directory.Exists)
                 .WithMessage(Resources.ErrorInvalidCachePath);
+            this.RuleFor(o => o.Token)
+                .NotNull()
+                .NotEmpty();
         }
     }
 }
