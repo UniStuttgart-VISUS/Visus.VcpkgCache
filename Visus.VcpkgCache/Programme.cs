@@ -5,8 +5,10 @@
 // <author>Christoph Müller</author>
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.OpenApi;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Visus.HeaderAuthentication;
 using Visus.HeaderAuthentication.Handlers;
@@ -30,6 +32,8 @@ builder.Services.AddHeaderAuthentication("Token", o => {
 });
 
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 // Build the application
 var app = builder.Build();
@@ -39,5 +43,10 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+if (app.Environment.IsDevelopment()) {
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.Run();
