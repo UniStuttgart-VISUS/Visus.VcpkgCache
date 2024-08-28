@@ -5,7 +5,9 @@
 // <author>Christoph Müller</author>
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.OpenApi;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,6 +18,11 @@ using Visus.VcpkgCache;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Kestrel.
+builder.WebHost.ConfigureKestrel(o => {
+    builder.Configuration.GetSection("KestrelLimits").Bind(o.Limits);
+});
 
 // Add services to the container.
 builder.Services.AddSingleton<IValidateOptions<Settings>,
@@ -32,8 +39,8 @@ builder.Services.AddHeaderAuthentication("Token", o => {
 });
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+//builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddSwaggerGen();
 
 // Build the application
 var app = builder.Build();
@@ -44,9 +51,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-if (app.Environment.IsDevelopment()) {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment()) {
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
 
 app.Run();

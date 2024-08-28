@@ -79,6 +79,7 @@ namespace Visus.VcpkgCache.Controllers {
         [Authorize]
         [Produces("application/json")]
         public IActionResult Get() {
+            this._logger.LogDebug("Package list requested.");
             var files = from f in Directory.GetFiles(this._settings.Path)
                         select Path.GetFileNameWithoutExtension(f);
             return this.Ok(files);
@@ -136,6 +137,7 @@ namespace Visus.VcpkgCache.Controllers {
         /// <returns>The state of success of the operation.</returns>
         [HttpPut("{path}")]
         [Authorize]
+        [DisableRequestSizeLimit]
         public async Task<IActionResult> Put(string path) {
             if (path.ContainsInvalidFileNameChars()) {
                 return this.BadRequest(Resources.ErrorPackageName);

@@ -50,6 +50,9 @@ Update the application settings in `/opt/vckpgcache/appsettings.json`:
         "Path": "/var/vcpkgcache",
         "Token": "<set a reasonable token here>"
     }
+    "KestrelLimits": {
+        "MaxRequestBodySize": 1073741824
+    }
 }
 ```
 

@@ -13,7 +13,7 @@ using System.Linq;
 namespace Visus.VcpkgCache {
 
     /// <summary>
-    /// Wraps a fluent <see cref="TValidator"/> to implement
+    /// Wraps a fluent <typeparamref name="TValidator"/> to implement
     /// <see cref="IValidateOptions{TOptions}"/>.
     /// </summary>
     /// <typeparam name="TOptions"></typeparam>
