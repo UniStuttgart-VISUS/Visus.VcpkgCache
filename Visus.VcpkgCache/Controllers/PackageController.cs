@@ -43,6 +43,35 @@ namespace Visus.VcpkgCache.Controllers {
         #endregion
 
         /// <summary>
+        /// Deletes the specified package.
+        /// </summary>
+        /// <param name="path">The path/name of the package to retrieve.</param>
+        /// <returns>The contents of the package.</returns>
+        [HttpDelete("{path}")]
+        [Authorize]
+        public IActionResult Delete(string path) {
+            if (path.ContainsInvalidFileNameChars()) {
+                return this.BadRequest(Resources.ErrorPackageName);
+            }
+
+            this._logger.LogDebug("Package \"{Package}\" is to be deleted from "
+                + "the cache.", path);
+            path = this.GetPhysicalPath(path);
+
+            if (!IoFile.Exists(path)) {
+                this._logger.LogWarning("No package exists at \"{Path}\".",
+                    path);
+                return this.NotFound();
+            }
+
+            IoFile.Delete(path);
+            this._logger.LogInformation("Package \"{Package}\" was deleted "
+                + "from the cache.", path);
+
+            return this.NoContent();
+        }
+
+        /// <summary>
         /// Gets a list of all registered packages to authorised users.
         /// </summary>
         /// <returns></returns>
@@ -70,9 +99,13 @@ namespace Visus.VcpkgCache.Controllers {
                 + "cache.", path);
             path = this.GetPhysicalPath(path);
 
-            return IoFile.Exists(path)
-                ? this.PhysicalFile(path, MediaTypeNames.Application.Octet)
-                : this.NotFound();
+            if (!IoFile.Exists(path)) {
+                this._logger.LogWarning("No package exists at \"{Path}\".",
+                    path);
+                return this.NotFound();
+            }
+
+            return this.PhysicalFile(path, MediaTypeNames.Application.Octet);
         }
 
         /// <summary>
@@ -87,8 +120,8 @@ namespace Visus.VcpkgCache.Controllers {
                 return this.BadRequest(Resources.ErrorPackageName);
             }
 
-            this._logger.LogDebug("Query package \"{Package}\" from cache.",
-                path);
+            this._logger.LogDebug("Check existence of package \"{Package}\" in "
+                + "cache.", path);
             path = this.GetPhysicalPath(path);
 
             return IoFile.Exists(path)
